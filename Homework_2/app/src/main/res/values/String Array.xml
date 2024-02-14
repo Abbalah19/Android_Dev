@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Pizza_Size">
+        <item>Select Size</item>
+        <item>Medium ($9.99)</item>
+        <item>Large ($13.99)</item>
+        <item>Extra Large ($15.99)</item>
+        <item>Party Size ($25.99)</item>
+    </string-array>
+</resources>
