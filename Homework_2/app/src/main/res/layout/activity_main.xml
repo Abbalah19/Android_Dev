@@ -286,4 +286,121 @@
         app:layout_constraintStart_toEndOf="@+id/sub_quant_button"
         app:layout_constraintTop_toTopOf="@+id/sub_quant_button" />
 
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <TextView
+        android:id="@+id/subtotal_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Subtotal: $"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/tax_textview"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/quantity_textview" />
+
+    <TextView
+        android:id="@+id/total_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total: $"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tax_textview"
+        app:layout_constraintTop_toBottomOf="@+id/tax_textview" />
+
+    <TextView
+        android:id="@+id/tax_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tax: $"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/total_textview"
+        app:layout_constraintEnd_toEndOf="@+id/subtotal_textView"
+        app:layout_constraintTop_toBottomOf="@+id/subtotal_textView" />
+
+    <TextView
+        android:id="@+id/sub_float_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/tax_float_textview"
+        app:layout_constraintStart_toStartOf="@+id/tax_float_textview"
+        app:layout_constraintTop_toBottomOf="@+id/quantity_textview" />
+
+    <TextView
+        android:id="@+id/tax_float_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/total_float_textview"
+        app:layout_constraintStart_toStartOf="@+id/total_float_textview"
+        app:layout_constraintTop_toBottomOf="@+id/sub_float_textview" />
+
+    <TextView
+        android:id="@+id/total_float_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0.00"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/total_textview"
+        app:layout_constraintTop_toBottomOf="@+id/tax_float_textview" />
+
+    <TextView
+        android:id="@+id/add_delivery_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:gravity="center"
+        android:text="Add Delivery?   "
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/delivery_switch"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@+id/sub_float_textview"
+        app:layout_constraintTop_toTopOf="@+id/delivery_switch" />
+
+    <Switch
+        android:id="@+id/delivery_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="12dp"
+        android:text="No ($0.00)"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/reset_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/add_delivery_textview"
+        app:layout_constraintTop_toBottomOf="@+id/add_quant_button" />
+
+    <Button
+        android:id="@+id/reset_button"
+        android:layout_width="117dp"
+        android:layout_height="69dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="Reset"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/delivery_switch" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
