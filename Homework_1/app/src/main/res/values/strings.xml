@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Layout_class3</string>
+    <string name="simple_math_game">Simple Math Game</string>
+    <string name="choose_the_operation_that_correctly_solves_the_problem">Choose the operation that correctly solves the problem</string>
+</resources>
