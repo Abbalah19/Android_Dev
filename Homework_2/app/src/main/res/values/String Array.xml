@@ -7,4 +7,7 @@
         <item>Extra Large ($15.99)</item>
         <item>Party Size ($25.99)</item>
     </string-array>
+
+    <string name="pizza_order">Pizza Order</string>
+    <string name="reset_button_string">-</string>
 </resources>

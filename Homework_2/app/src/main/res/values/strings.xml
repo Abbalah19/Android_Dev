@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Homework_2</string>
+    <string name="add_delivery">Add Delivery?</string>
+    <string name="add_quant_string">+</string>
+    <string name="no_del_with_price">No ($0.00)</string>
+    <string name="quantity_value">0</string>
+    <string name="pepperoni">Pepperoni</string>
+    <string name="bbq_chicken">BBQ Chicken</string>
+    <string name="margherita_premium">Margherita (Premium)</string>
+    <string name="hawaiian_premium">Hawaiian (Premium)</string>
+    <string name="choose_pizza_size">Choose Pizza Size:</string>
+    <string name="choose_your_pizza">Choose Your Pizza:</string>
+    <string name="quantity">Quantity:</string>
+    <string name="tax">Tax: $</string>
+    <string name="subtotal">Subtotal: $</string>
+    <string name="tax_value_string">0.00</string>
+    <string name="extra_spicy">Extra Spicy:</string>
+    <string name="no_spice">No Spice</string>
+    <string name="sub_total_value_string">0.00</string>
+    <string name="olives_1_70">Olives ($1.70)</string>
+    <string name="onions_1_25">Onions ($1.25)</string>
+    <string name="spinach_2_00">Spinach ($2.00)</string>
+    <string name="tomatoes_1_00">Tomatoes ($1.00)</string>
+    <string name="spice_value_string">0</string>
+    <string name="mushrooms_2_30">Mushrooms ($2.30)</string>
+    <string name="spiciness_level">Spiciness Level:</string>
+    <string name="broccoli_1_80">Broccoli ($1.80)</string>
+    <string name="extra_toppings">Extra Toppings:</string>
+    <string name="total_value_string">0.00</string>
+    <string name="reset">Reset</string>
+    <string name="total">Total: $</string>
 </resources>
