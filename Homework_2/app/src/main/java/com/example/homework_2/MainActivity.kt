@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
+import android.widget.RadioGroup
 import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
@@ -18,7 +19,7 @@ import android.widget.Spinner
 
 
 var pizzaType = 0.00f;    var pizzaSize = 0.00f;    var toppingsPrice = 0.00f;
-var delivery = 0.00f;    var addSpice = 0.00f;    var quantityMultiplier = 0;
+var delivery = 0.00f;    var addSpice = 0.00f;    var quantityMultiplier = 1;
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +30,22 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val spicySwitch = findViewById<Switch>(R.id.spicy_switch)
         val seekBar = findViewById<SeekBar>(R.id.seekBar)
         val spiceLevel = findViewById<TextView>(R.id.spice_number_textview)
+        val spiceTextLabel = findViewById<TextView>(R.id.spicy_level_slide_textview)
 
         // Initially hide the SeekBar, its already invisible in the xml code??
         seekBar.visibility = View.GONE
+        spiceLevel.visibility = View.GONE
+        spiceTextLabel.visibility = View.GONE
 
         // Create object to attach listener to. Switch = type mismatch? otherwise same as in class example
         spicySwitch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
                 if (spicySwitch.isChecked) {
-                    addSpice = 2.00f
+                    addSpice = 1.00f
                     spicySwitch.text = "Spicy"
                     seekBar.visibility = View.VISIBLE
+                    spiceLevel.visibility = View.VISIBLE
+                    spiceTextLabel.visibility = View.VISIBLE
                     totalCalc()
                 } else {
                     addSpice = 0.00f
@@ -47,6 +53,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     spiceLevel.text = "0"
                     seekBar.progress = 0
                     seekBar.visibility = View.GONE
+                    spiceLevel.visibility = View.GONE
+                    spiceTextLabel.visibility = View.GONE
                     totalCalc()
                 }
             }
@@ -60,6 +68,20 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {  }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {  }
         })
+        val deliverySwitch = findViewById<Switch>(R.id.delivery_switch)
+        deliverySwitch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+                if (deliverySwitch.isChecked) {
+                    delivery = 2.00f
+                    deliverySwitch.text = "Yes ($2.00)"
+                    totalCalc()
+                } else {
+                    delivery = 0.00f
+                    deliverySwitch.text = "No ($0.00)"
+                    totalCalc()
+                }
+            }
+        })
 
         // Create a list of some strings that will be shown in the spinner
         val pizzaSizeOptions = listOf("Choose a Size", "Medium ($9.99)", "Large ($13.99)", "Extra Large ($15.99)", "Party Size ($25.99)")
@@ -68,13 +90,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val pizzaSizeAdapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, pizzaSizeOptions)
 
         // Store the the listView widget in a variable
-        val animalSpinner = findViewById<Spinner>(R.id.size_spinner)
+        val pizzaSpinner = findViewById<Spinner>(R.id.size_spinner)
 
         // set the adapter to the spinner
-        animalSpinner.adapter = pizzaSizeAdapter
+        pizzaSpinner.adapter = pizzaSizeAdapter
 
         // set the onItemSelectedListener as (this).  (this) refers to this activity that implements OnItemSelectedListener interface
-        animalSpinner.onItemSelectedListener = this
+        pizzaSpinner.onItemSelectedListener = this
     }
 
     // The following two methods are callback methods of OnItemSelectedListener interface
@@ -186,12 +208,12 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 findViewById<TextView>(R.id.pizza_count_textview).text = "$quantityMultiplier"
             }
             R.id.sub_quant_button -> {
-                if (quantityMultiplier > 0){
+                if (quantityMultiplier > 1){
                     quantityMultiplier -= 1
                     findViewById<TextView>(R.id.pizza_count_textview).text = "$quantityMultiplier"
                 }
                 else {
-                    Toast.makeText(this, "Can't have less than zero pizzas", Toast.LENGTH_SHORT).show()}
+                    Toast.makeText(this, "Can't have less than one pizza", Toast.LENGTH_SHORT).show()}
             }
         }
         totalCalc()
@@ -202,16 +224,41 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val formatSubTotal = String.format("%.2f", subtotal)
         findViewById<TextView>(R.id.sub_float_textview).text = "$formatSubTotal"
 
-        val tax = subtotal * 1.0635
-        val formatTax = String.format("%.2f", tax)
+        var taxResult = 0.00f
+        if (delivery == 2.00f && quantityMultiplier > 0){
+            taxResult = (subtotal - (delivery* quantityMultiplier)) * 0.0635f
+        }
+        else {
+            taxResult = (subtotal) * 0.0635f
+        }
+        val formatTax = String.format("%.2f", taxResult)
         findViewById<TextView>(R.id.tax_float_textview).text = "$formatTax"
 
-        val total = (subtotal * 1.0635) + delivery
+
+        val total = (subtotal + taxResult)
         val formatTotal = String.format("%.2f", total)
         findViewById<TextView>(R.id.total_float_textview).text = "$formatTotal"
     }
 
     fun resetButton(view:View){
+        pizzaType = 0.00f; pizzaSize = 0.00f; toppingsPrice = 0.00f;
+        delivery = 0.00f; addSpice = 0.00f; quantityMultiplier = 1;
+        findViewById<RadioGroup>(R.id.radioGroup).clearCheck()
+        findViewById<ImageView>(R.id.pizza_image).setImageResource(R.drawable.pizza_crust)
+        findViewById<Spinner>(R.id.size_spinner).setSelection(0)
+        findViewById<CheckBox>(R.id.topping_tomato_checkbox).isChecked = false
+        findViewById<CheckBox>(R.id.topping_mushrooms_checkboxcheckBox2).isChecked = false
+        findViewById<CheckBox>(R.id.topping_olives_checkbox).isChecked = false
+        findViewById<CheckBox>(R.id.topping_onions_checkbox).isChecked = false
+        findViewById<CheckBox>(R.id.topping_broccoli_checkbox).isChecked = false
+        findViewById<CheckBox>(R.id.topping_spinach_checkbox).isChecked = false
+        findViewById<SeekBar>(R.id.seekBar).visibility = View.GONE
+        findViewById<TextView>(R.id.pizza_count_textview).text = "1"
 
+        val spicySwitch = findViewById<Switch>(R.id.spicy_switch)
+        spicySwitch.isChecked = false
+
+        val deliverySwitch = findViewById<Switch>(R.id.delivery_switch)
+        deliverySwitch.isChecked = false
     }
 }
