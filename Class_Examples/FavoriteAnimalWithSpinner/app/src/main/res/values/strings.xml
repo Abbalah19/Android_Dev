@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FavoriteAnimalWithSpinner</string>
+    <string name="question_text">Choose your favorite animal below:</string>
+</resources>

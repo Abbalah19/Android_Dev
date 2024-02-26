@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FavoriteAnimalWithListViewRemovable</string>
+    <string name="question_text">
+        Choose your favorite animal below:
+    </string>
+    <string name="secondary_text">
+        (Long press to remove an item from the list)
+    </string>
+</resources>

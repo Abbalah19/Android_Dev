@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">FavoriteAnimalWithRadioButtons</string>
+    <string name="banner">Choose your favorite animal below</string>
+</resources>
