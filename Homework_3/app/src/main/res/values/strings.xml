@@ -2,4 +2,11 @@
     <string name="app_name">Homework_3</string>
     <string name="titleBar">Rate Your Favorite Animal</string>
     <string name="subTitle">Tap an animal name below to rate your favorite</string>
+    <string name="mostRecentText">Most Recently Rated Animal</string>
+    <string name="ratingLabelText">Rating: </string>
+    <string name="reset_all_data">Reset All Data</string>
+    <string name="defualtAnimal">Animal:</string>
+    <string name="act2AnimalTitle">Animal?:</string>
+    <string name="act2AnimalRatingText">What is your rating?</string>
+    <string name="act2SaveButton">Save Rating</string>
 </resources>
