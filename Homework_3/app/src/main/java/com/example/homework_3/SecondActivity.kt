@@ -19,20 +19,26 @@ class SecondActivity : AppCompatActivity() {
 
     private val TAG = "SecondActivity"
     lateinit var selectedItem: String
+    val FILE_NAME = "rating_data"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
         selectedItem = intent.getStringExtra("selectedItem") ?:""
+
         // Set Title and image
         findViewById<TextView>(R.id.act2_animal_title_textview).text = selectedItem
         val imageView = findViewById<ImageView>(R.id.imageView2)
+        val ratingBar = findViewById<RatingBar>(R.id.act2_rating_bar)
         when (selectedItem) {
             "Dog" -> imageView.setImageResource(R.drawable.dog)
             "Cat" -> imageView.setImageResource(R.drawable.cat)
             "Bear" -> imageView.setImageResource(R.drawable.bear)
             "Rabbit" -> imageView.setImageResource(R.drawable.rabbit)
         }
+        val sharedPreferences = getSharedPreferences(FILE_NAME, MODE_PRIVATE)
+        val rating = sharedPreferences.getFloat(selectedItem, -1f)
+        ratingBar.setRating(rating)
     }
 
     fun saveData(view: View){
