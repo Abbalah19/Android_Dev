@@ -1,0 +1,7 @@
+<resources>
+    <string name ="title_textView">Ticket Finder With TicketMaster</string>
+    <string name="app_name">Homework_4</string>
+    <string name="keyword">Keyword</string>
+    <string name="city_location">City/Location</string>
+    <string name="search_button">Search</string>
+</resources>
