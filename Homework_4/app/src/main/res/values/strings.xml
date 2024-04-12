@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Homework_4</string>
+    <string name="ticketmaster_search">TicketMaster Search</string>
+    <string name="search">Search</string>
+    <string name="keyword">Keyword</string>
+    <string name="city">City</string>
+    <string name="event_location">Event Location</string>
+    <string name="event_date">Event Date</string>
+    <string name="event_name">Event Name</string>
+    <string name="price_range">Price Range</string>
+    <string name="see_event">See Event</string>
+    <string name="no_events_found_please_check_your_spelling_or_try_a_different_event">No Events Found. Please Check Your Spelling or Try a Different Event</string>
+</resources>
