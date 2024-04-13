@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sign_in_background"
+    tools:context=".CreateNewAccount">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/form_cont"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#2CC7FFEE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.108"
+        tools:ignore="TextSizeCheck">
+
+        <Button
+            android:id="@+id/submitNewAccount_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/create_New_account"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/confPassword_editTextTextPassword"
+            app:layout_constraintStart_toStartOf="@+id/confPassword_editTextTextPassword"
+            app:layout_constraintTop_toBottomOf="@+id/confPassword_editTextTextPassword" />
+
+        <TextView
+            android:id="@+id/newAccountTitle_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/create_a_new_account"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/userName_editTextText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/userName_editTextText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/new_username"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:textColor="#000000"
+            android:textColorHint="#005255"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/newEmail_editTextTextEmailAddress"
+            app:layout_constraintEnd_toEndOf="@+id/newAccountTitle_textView"
+            app:layout_constraintStart_toStartOf="@+id/newAccountTitle_textView"
+            app:layout_constraintTop_toBottomOf="@+id/newAccountTitle_textView"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/newPassword_editTextTextPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/new_password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColor="#000000"
+            android:textColorHint="#005255"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/confPassword_editTextTextPassword"
+            app:layout_constraintEnd_toEndOf="@+id/newEmail_editTextTextEmailAddress"
+            app:layout_constraintStart_toStartOf="@+id/newEmail_editTextTextEmailAddress"
+            app:layout_constraintTop_toBottomOf="@+id/newEmail_editTextTextEmailAddress"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/newEmail_editTextTextEmailAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/new_email_address"
+            android:importantForAutofill="no"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:textColor="#000000"
+            android:textColorHint="#005255"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/newPassword_editTextTextPassword"
+            app:layout_constraintEnd_toEndOf="@+id/userName_editTextText"
+            app:layout_constraintStart_toStartOf="@+id/userName_editTextText"
+            app:layout_constraintTop_toBottomOf="@+id/userName_editTextText"
+            tools:ignore="TextContrastCheck" />
+
+        <EditText
+            android:id="@+id/confPassword_editTextTextPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/confirm_password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColor="#000000"
+            android:textColorHint="#005255"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/submitNewAccount_button"
+            app:layout_constraintEnd_toEndOf="@+id/newPassword_editTextTextPassword"
+            app:layout_constraintStart_toStartOf="@+id/newPassword_editTextTextPassword"
+            app:layout_constraintTop_toBottomOf="@+id/newPassword_editTextTextPassword" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,17 +7,79 @@
     android:background="@drawable/concert_crowd"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/title_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTintMode="add"
-        android:text="Event Finder"
-        android:textSize="34sp"
-        android:textStyle="bold"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="409dp"
+        android:layout_height="668dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/title_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:backgroundTintMode="add"
+            android:fontFamily="monospace"
+            android:text="@string/event_finder"
+            android:textSize="34sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/username_editTextText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:ems="10"
+            android:hint="@string/enter_username"
+            android:inputType="text"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="@+id/title_textView"
+            app:layout_constraintStart_toStartOf="@+id/title_textView"
+            app:layout_constraintTop_toBottomOf="@+id/title_textView"
+            android:autofillHints="" />
+
+        <EditText
+            android:id="@+id/password_editTextPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:ems="10"
+            android:hint="@string/enterpassword"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            app:layout_constraintEnd_toEndOf="@+id/username_editTextText"
+            app:layout_constraintStart_toStartOf="@+id/username_editTextText"
+            app:layout_constraintTop_toBottomOf="@+id/username_editTextText"
+            android:autofillHints="" />
+
+        <Button
+            android:id="@+id/signIn_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="signInUser"
+            android:text="@string/sign_in"
+            app:layout_constraintEnd_toEndOf="@+id/password_editTextPassword"
+            app:layout_constraintStart_toStartOf="@+id/password_editTextPassword"
+            app:layout_constraintTop_toBottomOf="@+id/password_editTextPassword" />
+
+        <Button
+            android:id="@+id/newAccount_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="createNewAccount"
+            android:text="@string/create_new_account"
+            app:layout_constraintEnd_toEndOf="@+id/signIn_button"
+            app:layout_constraintStart_toStartOf="@+id/signIn_button"
+            app:layout_constraintTop_toBottomOf="@+id/signIn_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
