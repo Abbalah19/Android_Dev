@@ -15,6 +15,9 @@
         android:theme="@style/Theme.CS414Final"
         tools:targetApi="31">
         <activity
+            android:name=".TicketSearch"
+            android:exported="false" />
+        <activity
             android:name=".CreateNewAccount"
             android:exported="false" />
         <activity

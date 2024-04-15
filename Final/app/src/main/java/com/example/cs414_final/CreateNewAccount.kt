@@ -2,6 +2,7 @@ package com.example.cs414_final
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -43,7 +44,7 @@ class CreateNewAccount : AppCompatActivity() {
         // Check if user is signed in (non-null) and update UI accordingly.
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            makeAlerts("User already signed in", "Please sign out to create a new account")
+            FirebaseAuth.getInstance().signOut()
         }
     }
 
@@ -77,7 +78,7 @@ class CreateNewAccount : AppCompatActivity() {
     }
 
     private fun createNewAccount( username: String, password: String, email: String){
-        Toast.makeText(this, "Create New Account", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "Create New Account Function Hit", Toast.LENGTH_SHORT).show()
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
@@ -91,7 +92,7 @@ class CreateNewAccount : AppCompatActivity() {
                     )
 
                     // Add a new document with a generated ID
-                    fireDB.collection("users")
+                    fireDB.collection("userProfiles")
                         .add(userProfile)
                         .addOnSuccessListener { documentReference ->
                             Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
@@ -110,7 +111,10 @@ class CreateNewAccount : AppCompatActivity() {
 
     private fun updateUI(user: Any?) {
         if (user != null) {
-            makeAlerts("Account created", "Account created successfully")
+            finish()
+            val intent = Intent(this, TicketSearch::class.java)
+            startActivity(intent)
+            //makeAlerts("Account created", "Account created successfully")
         }
         else {
             makeAlerts("Account not created", "Sorry, there was an error creating your account. Please try again later.")

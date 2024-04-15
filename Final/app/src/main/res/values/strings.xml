@@ -3,12 +3,26 @@
     <string name="enterpassword">Enter Password</string>
     <string name="create_new_account">Create New Account</string>
     <string name="sign_in">Sign In</string>
-    <string name="enter_username">Enter Username</string>
-    <string name="event_finder">Event Finder</string>
+    <string name="enter_username">Enter Email</string>
+    <string name="event_finder">&#160;&#160;Event Finder&#160;&#160;</string>
     <string name="create_a_new_account">Create a New Account</string>
     <string name="create_New_account">Create Account</string>
     <string name="new_email_address">Email Address</string>
     <string name="new_password">Password</string>
     <string name="new_username">Username</string>
     <string name="confirm_password">Confirm Password</string>
+    <string name="keyword">KEYWORD</string>
+    <string name="location">LOCATION</string>
+    <string name="near_me">Near Me</string>
+    <string name="search">Search</string>
+    <string name="welcome_to_event_search">Welcome to Event Search</string>
+
+    <string name="event_location">Event Location</string>
+    <string name="event_date">Event Date</string>
+    <string name="event_name">Event Name</string>
+    <string name="price_range">Price Range</string>
+    <string name="see_event">See Event</string>
+    <string name="no_events_found_please_check_your_spelling_or_try_a_different_event">No Events Found. Please Check Your Spelling or Try a Different Event</string>
+    <string name="saved_events">Saved Events</string>
+    <string name="sign_out">Sign Out</string>
 </resources>

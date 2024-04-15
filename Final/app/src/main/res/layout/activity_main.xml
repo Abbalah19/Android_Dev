@@ -23,16 +23,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTintMode="add"
-            android:fontFamily="monospace"
+            android:fontFamily="sans-serif-smallcaps"
             android:text="@string/event_finder"
-            android:textSize="34sp"
-            android:textStyle="bold"
+            android:textSize="48sp"
+            android:textStyle="bold|italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/username_editTextText"
+            android:id="@+id/email_editTextText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -54,9 +54,9 @@
             android:hint="@string/enterpassword"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            app:layout_constraintEnd_toEndOf="@+id/username_editTextText"
-            app:layout_constraintStart_toStartOf="@+id/username_editTextText"
-            app:layout_constraintTop_toBottomOf="@+id/username_editTextText"
+            app:layout_constraintEnd_toEndOf="@+id/email_editTextText"
+            app:layout_constraintStart_toStartOf="@+id/email_editTextText"
+            app:layout_constraintTop_toBottomOf="@+id/email_editTextText"
             android:autofillHints="" />
 
         <Button
