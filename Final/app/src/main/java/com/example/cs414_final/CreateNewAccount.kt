@@ -11,7 +11,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 
 private const val TAG = "CreateNewAccount_Activity"
@@ -93,9 +92,10 @@ class CreateNewAccount : AppCompatActivity() {
 
                     // Add a new document with a generated ID
                     fireDB.collection("userProfiles")
-                        .add(userProfile)
+                        .document(user?.uid.toString())
+                        .set(userProfile)
                         .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${userProfile}")
                         }
                         .addOnFailureListener { e ->
                             Log.w(TAG, "Error adding document", e)

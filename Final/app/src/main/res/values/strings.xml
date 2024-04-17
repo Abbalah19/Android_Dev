@@ -25,4 +25,5 @@
     <string name="no_events_found_please_check_your_spelling_or_try_a_different_event">No Events Found. Please Check Your Spelling or Try a Different Event</string>
     <string name="saved_events">Saved Events</string>
     <string name="sign_out">Sign Out</string>
+    <string name="save_event">Save Event</string>
 </resources>

@@ -1,8 +1,3 @@
-/*
-TODO
-Add a catch for empty fields on the logIn page
- */
-
 package com.example.cs414_final
 
 import android.app.AlertDialog

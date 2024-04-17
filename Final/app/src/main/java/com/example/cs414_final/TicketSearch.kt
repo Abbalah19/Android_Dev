@@ -16,7 +16,9 @@ import com.example.cs414_final.Event
 import com.example.cs414_final.EventsList
 import com.example.cs414_final.RecyclerViewAdapter
 import com.example.cs414_final.TicketMasterService
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +34,16 @@ class TicketSearch : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ticket_search)
+
+        val db = Firebase.firestore
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        Log.d(TAG, "Current user: $currentUser")
+        val docRef = db.collection("userProfiles").document(currentUser?.uid.toString())
+        docRef.get().addOnSuccessListener { documentSnapshot ->
+            val username = documentSnapshot.getString("username")
+            findViewById<TextView>(R.id.welcome_textView).text = "Welcome, $username!"
+        }
+
 
         val eventsList = ArrayList<Event>()
         val adapter = RecyclerViewAdapter(eventsList)
@@ -114,7 +126,6 @@ class TicketSearch : AppCompatActivity() {
             }
             .show()
     }
-
 
     fun signOut (view: View) {
         FirebaseAuth.getInstance().signOut()
