@@ -30,20 +30,17 @@ private const val TAG = "TicketSearch"
 class TicketSearch : AppCompatActivity() {
     private val BASE_URL = "https://app.ticketmaster.com/discovery/v2/"
     private val API_KEY = "Qvr3MbRtSApocNPL6TbfDGdHnlm087nD"
+    private val db = Firebase.firestore
+    private val currentUser = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ticket_search)
 
-        val db = Firebase.firestore
-        val currentUser = FirebaseAuth.getInstance().currentUser
         Log.d(TAG, "Current user: $currentUser")
-        val docRef = db.collection("userProfiles").document(currentUser?.uid.toString())
-        docRef.get().addOnSuccessListener { documentSnapshot ->
-            val username = documentSnapshot.getString("username")
-            findViewById<TextView>(R.id.welcome_textView).text = "Welcome, $username!"
-        }
 
+        // gets username from firestore and sets the welcome text
+        setUser()
 
         val eventsList = ArrayList<Event>()
         val adapter = RecyclerViewAdapter(eventsList)
@@ -58,25 +55,12 @@ class TicketSearch : AppCompatActivity() {
 
         val searchButton = findViewById<Button>(R.id.search_button)
         val TicketMasterService = retrofit.create(TicketMasterService::class.java)
-
         searchButton.setOnClickListener {
-            val keyword = findViewById<TextView>(R.id.keyword_editTextText).text.toString()
-            val city = findViewById<TextView>(R.id.location_editTextText).text.toString()
             hideKeyboard()
 
-            // Check if keyword and city are empty, make call to showAlert()
-            if (keyword.isEmpty() && city.isEmpty()) {
-                showAlert("Both Keyword and City are empty", "Please enter a keyword and city to search for events")
-            }
-            else if (keyword.isEmpty()) {
-                showAlert("Keyword is empty", "Please enter a keyword to search for events")
-            }
-            else if (city.isEmpty()) {
-                showAlert("City is empty", "Please enter a city to search for events")
-            }
-            else
-
-            // if both terms have been entered, make a call to TicketMasterService.getEvents()
+            val keyword = findViewById<TextView>(R.id.keyword_editTextText).text.toString()
+            val city = findViewById<TextView>(R.id.location_editTextText).text.toString()
+            if (checkFields(keyword, city)) {
                 TicketMasterService.getEvents(API_KEY, keyword, city, "date,asc")
                     .enqueue(object : Callback<EventsList> {
                         override fun onResponse(
@@ -88,8 +72,10 @@ class TicketSearch : AppCompatActivity() {
                             val body = response.body()
                             if (body == null || body._embedded == null) {
                                 // if response is null, hide the recycler and make the noEntryText visible
-                                findViewById<RecyclerView>(R.id.recyclerView).visibility = RecyclerView.INVISIBLE
-                                findViewById<TextView>(R.id.noEntryText).visibility = TextView.VISIBLE
+                                findViewById<RecyclerView>(R.id.recyclerView).visibility =
+                                    RecyclerView.INVISIBLE
+                                findViewById<TextView>(R.id.noEntryText).visibility =
+                                    TextView.VISIBLE
                                 Log.w(TAG, "Valid response was not received or events list is null")
                                 return
                             }
@@ -97,7 +83,8 @@ class TicketSearch : AppCompatActivity() {
                             eventsList.clear()
                             // reset the recycler view and noEntryText visibility
                             findViewById<TextView>(R.id.noEntryText).visibility = TextView.INVISIBLE
-                            findViewById<RecyclerView>(R.id.recyclerView).visibility = RecyclerView.VISIBLE
+                            findViewById<RecyclerView>(R.id.recyclerView).visibility =
+                                RecyclerView.VISIBLE
                             // add new events to the list
                             eventsList.addAll(body._embedded.events)
                             // update the recycler view
@@ -110,14 +97,47 @@ class TicketSearch : AppCompatActivity() {
                             Log.e(TAG, "onFailure: $t")
                         }
                     })
+            }
         }
     }
 
+    // Check user fields, return true if all fields are filled
+    private fun checkFields(keyword: String, city: String): Boolean {
+        // Check if keyword and city are empty, make call to showAlert()
+        if (keyword.isEmpty() && city.isEmpty()) {
+            showAlert("Both Keyword and City are empty", "Please enter a keyword and city to search for events")
+            return false
+        }
+        else if (keyword.isEmpty()) {
+            showAlert("Keyword is empty", "Please enter a keyword to search for events")
+            return false
+        }
+        else if (city.isEmpty()) {
+            showAlert("City is empty", "Please enter a city to search for events")
+            return false
+        }
+        else
+            return true
+    }
+
+    // called on button click, hides the keyboard
     fun hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
-    fun showAlert(title: String, message: String) {
+
+
+    // Function to get the username from firestore database and set the welcome text
+    private fun setUser(){
+        val docRef = db.collection("userProfiles").document(currentUser?.uid.toString())
+        docRef.get().addOnSuccessListener { documentSnapshot ->
+            val username = documentSnapshot.getString("username")
+            findViewById<TextView>(R.id.welcome_textView).text = "Welcome, $username!"
+        }
+    }
+
+    // Helper function to show an alert dialog
+    private fun showAlert(title: String, message: String) {
         AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message)
@@ -127,6 +147,7 @@ class TicketSearch : AppCompatActivity() {
             .show()
     }
 
+    // Clears user data and returns to the main activity
     fun signOut (view: View) {
         FirebaseAuth.getInstance().signOut()
         val intent = Intent(this, MainActivity::class.java)
