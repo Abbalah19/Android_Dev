@@ -98,35 +98,34 @@ class TicketSearch : AppCompatActivity() {
             }
         }
 
-        // When the near me button is clicked...
         val nearMeButton = findViewById<Button>(R.id.near_me_button)
         nearMeButton.setOnClickListener {
             hideKeyboard()
             val keyword = getKeywordCity().first
             if (checkFieldsNearMe(keyword)) {
-                if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) == PackageManager.PERMISSION_GRANTED
-                ) {
-                    showAlert("Location Permission Granted", "Location permission has been granted")
-                } else {
-                    //shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-                        1
-                    )
-                    if (ContextCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
-                        showAlert("Location Permission Granted","Location permission has been granted")
-                    } else {
-                        showAlert("Location Permission Denied","Location permission has been denied")
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),1)
                     }
+                else {
+                    showAlert("Location already Granted","Location permission has been granted")
+
                 }
+            }
+        }
+    }
+
+    // From Co-pilot - I got to the point where I was the wrong message and used AI to figure out the asynchronous operation
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1 -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    showAlert("Location Permission Granted","Location permission has been granted")
+                } else {
+                    showAlert("Location Permission Denied","Please Grant Location Permission In App Settings To Use This Feature")
+                }
+                return
             }
         }
     }
