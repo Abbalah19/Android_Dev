@@ -1,5 +1,6 @@
 package com.example.cs414_final
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -10,12 +11,14 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cs414_final.Event
 import com.example.cs414_final.EventsList
 import com.example.cs414_final.RecyclerViewAdapter
 import com.example.cs414_final.TicketMasterService
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.firestore
@@ -24,23 +27,30 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import android.Manifest
+import android.widget.EditText
+import androidx.core.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import android.content.pm.PackageManager
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import com.google.android.gms.location.LocationServices
 
 private const val TAG = "TicketSearch"
 
+@Suppress("NullChecksToSafeCall", "SENSELESS_COMPARISON")
 class TicketSearch : AppCompatActivity() {
     private val BASE_URL = "https://app.ticketmaster.com/discovery/v2/"
     private val API_KEY = "Qvr3MbRtSApocNPL6TbfDGdHnlm087nD"
     private val db = Firebase.firestore
     private val currentUser = FirebaseAuth.getInstance().currentUser
 
+    // for location services
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ticket_search)
-
-        Log.d(TAG, "Current user: $currentUser")
-
-        // gets username from firestore and sets the welcome text
-        setUser()
+        setUser() // changes the welcome text to the user's username
 
         val eventsList = ArrayList<Event>()
         val adapter = RecyclerViewAdapter(eventsList)
@@ -55,11 +65,11 @@ class TicketSearch : AppCompatActivity() {
 
         val searchButton = findViewById<Button>(R.id.search_button)
         val TicketMasterService = retrofit.create(TicketMasterService::class.java)
+
+        // When the search button is clicked...
         searchButton.setOnClickListener {
             hideKeyboard()
-
-            val keyword = findViewById<TextView>(R.id.keyword_editTextText).text.toString()
-            val city = findViewById<TextView>(R.id.location_editTextText).text.toString()
+            val (keyword, city) = getKeywordCity()
             if (checkFields(keyword, city)) {
                 TicketMasterService.getEvents(API_KEY, keyword, city, "date,asc")
                     .enqueue(object : Callback<EventsList> {
@@ -68,7 +78,6 @@ class TicketSearch : AppCompatActivity() {
                             response: Response<EventsList>
                         ) {
                             Log.d(TAG, "onResponse: $response")
-
                             val body = response.body()
                             if (body == null || body._embedded == null) {
                                 // if response is null, hide the recycler and make the noEntryText visible
@@ -79,18 +88,7 @@ class TicketSearch : AppCompatActivity() {
                                 Log.w(TAG, "Valid response was not received or events list is null")
                                 return
                             }
-                            // clear old list
-                            eventsList.clear()
-                            // reset the recycler view and noEntryText visibility
-                            findViewById<TextView>(R.id.noEntryText).visibility = TextView.INVISIBLE
-                            findViewById<RecyclerView>(R.id.recyclerView).visibility =
-                                RecyclerView.VISIBLE
-                            // add new events to the list
-                            eventsList.addAll(body._embedded.events)
-                            // update the recycler view
-                            adapter.notifyDataSetChanged()
-                            // Scroll to the top of the RecyclerView
-                            recyclerView.layoutManager?.scrollToPosition(0)
+                            updateRecyclerView(eventsList, body, adapter, recyclerView)
                         }
 
                         override fun onFailure(call: Call<EventsList>, t: Throwable) {
@@ -99,6 +97,61 @@ class TicketSearch : AppCompatActivity() {
                     })
             }
         }
+
+        // When the near me button is clicked...
+        val nearMeButton = findViewById<Button>(R.id.near_me_button)
+        nearMeButton.setOnClickListener {
+            hideKeyboard()
+            val keyword = getKeywordCity().first
+            if (checkFieldsNearMe(keyword)) {
+                if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
+                    showAlert("Location Permission Granted", "Location permission has been granted")
+                } else {
+                    //shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                        1
+                    )
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        showAlert("Location Permission Granted","Location permission has been granted")
+                    } else {
+                        showAlert("Location Permission Denied","Location permission has been denied")
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getKeywordCity(): Pair<String, String> {
+        val keyword = findViewById<EditText>(R.id.keyword_editTextText).text.toString()
+        val city = findViewById<EditText>(R.id.location_editTextText).text.toString()
+        return Pair(keyword, city)
+    }
+
+    // Function to update the recycler view with the new events, notify the adapter of the change
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateRecyclerView(eventsList: ArrayList<Event>, body: EventsList,
+                                   adapter: RecyclerViewAdapter, recyclerView: RecyclerView) {
+        // clear old list
+        eventsList.clear()
+        // reset the recycler view and noEntryText visibility
+        findViewById<TextView>(R.id.noEntryText).visibility = TextView.INVISIBLE
+        findViewById<RecyclerView>(R.id.recyclerView).visibility = RecyclerView.VISIBLE
+        // add new events to the list
+        eventsList.addAll(body._embedded.events)
+        // update the recycler view
+        adapter.notifyDataSetChanged()
+        // Scroll to the top of the RecyclerView
+        recyclerView.layoutManager?.scrollToPosition(0)
     }
 
     // Check user fields, return true if all fields are filled
@@ -120,12 +173,21 @@ class TicketSearch : AppCompatActivity() {
             return true
     }
 
+    private fun checkFieldsNearMe(keyword: String): Boolean {
+        // Check if keyword is empty, make call to showAlert()
+        if (keyword.isEmpty()) {
+            showAlert("Keyword is empty", "Please enter a keyword to search for events")
+            return false
+        }
+        else
+            return true
+    }
+
     // called on button click, hides the keyboard
-    fun hideKeyboard() {
+    private fun hideKeyboard() {
         val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
     }
-
 
     // Function to get the username from firestore database and set the welcome text
     private fun setUser(){

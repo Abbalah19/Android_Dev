@@ -10,4 +10,10 @@ interface TicketMasterService {
                   @Query("keyword") keyword: String,
                   @Query("city") city: String,
                   @Query("sort") sort: String) : Call<EventsList> // sort is hardcoded to "date,asc"
+
+    fun getNearMe(@Query("apikey") apikey: String,
+                  @Query("keyword") keyword: String,
+                  //@Query("city") city: String,
+                  @Query("geoPoint") geoPoint: String,
+                  @Query("sort") sort: String) : Call<EventsList> // sort is hardcoded to "date,asc"
 }

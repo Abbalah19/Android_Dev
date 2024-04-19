@@ -2,6 +2,6 @@
 plugins {
     id("com.android.application") version "8.2.1" apply false
     id("org.jetbrains.kotlin.android") version "1.9.22" apply false
-    // Google services - for Firebase
+    // Google services - for Firebase (and for location services?)
     id("com.google.gms.google-services") version "4.4.1" apply false
 }
