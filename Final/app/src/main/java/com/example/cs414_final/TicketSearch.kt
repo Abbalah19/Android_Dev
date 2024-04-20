@@ -33,6 +33,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import com.firebase.geofire.GeoFireUtils
+import com.firebase.geofire.GeoLocation
 import com.google.android.gms.location.LocationServices
 
 private const val TAG = "TicketSearch"
@@ -102,20 +104,54 @@ class TicketSearch : AppCompatActivity() {
         nearMeButton.setOnClickListener {
             hideKeyboard()
             val keyword = getKeywordCity().first
-            if (checkFieldsNearMe(keyword)) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),1)
-                    }
-                else {
-                    showAlert("Location already Granted","Location permission has been granted")
 
+            if (checkFieldsNearMe(keyword)) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
+                } else {
+                    //showAlert("Location already Granted", "Location permission has been granted")
+                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+                    fusedLocationClient.lastLocation.addOnSuccessListener {location ->
+                        if (location != null) {
+                            val geoPoint = GeoFireUtils.getGeoHashForLocation(
+                                GeoLocation(location.latitude, location.longitude)).take(5)
+                            Log.d(TAG, "!!!!!!!!geoPoint: $geoPoint")
+                            TicketMasterService.getNearMe(API_KEY, keyword, "50","miles",geoPoint, "date,asc")
+                                .enqueue(object : Callback<EventsList> {
+                                    override fun onResponse(
+                                        call: Call<EventsList>,
+                                        response: Response<EventsList>
+                                    ) {
+                                        Log.d(TAG, "onResponse: $response")
+                                        val body = response.body()
+                                        if (body == null || body._embedded == null) {
+                                            // if response is null, hide the recycler and make the noEntryText visible
+                                            findViewById<RecyclerView>(R.id.recyclerView).visibility =
+                                                RecyclerView.INVISIBLE
+                                            findViewById<TextView>(R.id.noEntryText).visibility =
+                                                TextView.VISIBLE
+                                            Log.w(TAG, "Valid response was not received or events list is null")
+                                            return
+                                        }
+                                        updateRecyclerView(eventsList, body, adapter, recyclerView)
+                                    }
+
+                                    override fun onFailure(call: Call<EventsList>, t: Throwable) {
+                                        Log.e(TAG, "onFailure: $t")
+                                    }
+                                })
+                        }
+                    }
                 }
             }
         }
     }
 
-    // From Co-pilot - I got to the point where I was the wrong message and used AI to figure out the asynchronous operation
+
+    // onRequestPermissionsResult is mostly From Co-pilot - I got to the point where I was getting the wrong
+    // message and used AI to figure out the asynchronous operation
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {

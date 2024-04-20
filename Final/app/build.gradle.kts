@@ -74,4 +74,5 @@ dependencies {
     // Ask Location Permission
     implementation("androidx.activity:activity-ktx:1.9.0")
     implementation("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.firebase:geofire-android-common:3.2.0")
 }
