@@ -1,4 +1,27 @@
 package com.example.cs414_final
+/* TODO
+save event button:
+X   Strings with a '/' break the app, need to sanitize the strings
+
+    How to get the image url? toString doesn't work
+
+    Check the price range, if = $0.0 - $0.0, hide the field, have to do this in saveEventIntent?
+        maybe just don't add it if the field is empty? can I check if it is already invisible?
+        -there is a getVisibility method - just as easy to check string == string
+
+    If events have the same title, what happens in the db? - it will overwrite the existing event
+
+X   IDE wants addition to db to be wrapped in a null catch, the user should never be able to click
+X       the button if they are not logged in but I guess it doesn't check that.
+
+XTeacher Feedback:
+X    move listeners to the ViewHolder and remove from onBindViewHolder
+
+App is slower now? Calls to Firebase and FireAuth are async, maybe its locking up the main thread?
+    logcat shows timeouts on some calls to Master API, especially when clicking search and near me
+    close together.
+ */
+
 
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +36,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Locale
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.ParseException
 
 
@@ -26,6 +51,51 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
         val eventPriceRange = itemView.findViewById<TextView>(R.id.priceRange_textView)
         val eventImage = itemView.findViewById<ImageView>(R.id.imageView)
         val seeEvent = itemView.findViewById<Button>(R.id.seeEvent_button)
+        val saveEvent = itemView.findViewById<Button>(R.id.saveEvent_button)
+
+        init {
+            seeEvent.setOnClickListener {
+                val position = adapterPosition
+                val currentItem = eventsList[position]
+                val url = currentItem._embedded.venues[0].url ?: currentItem.url
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(url)
+                itemView.context.startActivity(intent)
+            }
+
+            saveEvent.setOnClickListener {
+                // Create a SavedEventData object, if I pull them from the row_item.xml I should be
+                // to get the strings right from the views
+                // How do I get the image? toString doesn't get the URL?
+                //val eventImage = eventImage.
+                val eventName = eventTitle.text.toString().replace("/", "")
+                val eventLocation = eventLocation.text.toString()
+                val eventDate = eventDate.text.toString()
+                val eventPriceRange = eventPriceRange.text.toString()
+
+                // create an object to save the data in, idk if its needed but it seems cleaner then
+                // just saving the strings directly.
+                val savedEvent = SavedEventData().apply {
+                    //this.eventImage = eventImage
+                    this.eventName = eventName
+                    this.loaction = eventLocation
+                    this.date = eventDate
+                    this.priceRange = eventPriceRange
+                }
+
+                // Save the event object to Firestore under the current user's document
+                val db = FirebaseFirestore.getInstance()
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                // .add creates a random ID
+                if (currentUser != null && savedEvent.eventName != null) {
+                    db.collection("userProfiles").document(currentUser.uid)
+                        .collection("savedEvents").document(savedEvent.eventName!!)
+                        .set(savedEvent)
+                        .addOnSuccessListener { Log.d("Firestore", "DocumentSnapshot successfully written!") }
+                        .addOnFailureListener { e -> Log.w("Firestore", "Error writing document", e) }
+                }
+            }
+        }
     }
 
     // Create new views, not sure, taken from class notes
@@ -71,16 +141,6 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
                 .load(bestImageUrl)
                 .error(R.drawable.default_image) // any error including null will use the default image
                 .into(holder.eventImage)
-        }
-
-        // get the venue URL and tie it to the seeEvent button, using the URL in the event object
-        // keeps triggering some sort of session cancellation on ticketMaster for bot activity
-        // using the venue URL instead of the event URL
-        holder.seeEvent.setOnClickListener {
-            val url = currentItem._embedded.venues[0].url ?: currentItem.url
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse(url)
-            holder.itemView.context.startActivity(intent)
         }
     }
 

@@ -11,13 +11,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cs414_final.Event
-import com.example.cs414_final.EventsList
-import com.example.cs414_final.RecyclerViewAdapter
-import com.example.cs414_final.TicketMasterService
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -32,7 +27,6 @@ import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import com.firebase.geofire.GeoFireUtils
 import com.firebase.geofire.GeoLocation
 import com.google.android.gms.location.LocationServices
@@ -100,6 +94,7 @@ class TicketSearch : AppCompatActivity() {
             }
         }
 
+
         val nearMeButton = findViewById<Button>(R.id.near_me_button)
         nearMeButton.setOnClickListener {
             hideKeyboard()
@@ -109,7 +104,8 @@ class TicketSearch : AppCompatActivity() {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),1)
-                } else {
+                }
+                else {
                     //showAlert("Location already Granted", "Location permission has been granted")
                     fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
@@ -157,7 +153,7 @@ class TicketSearch : AppCompatActivity() {
         when (requestCode) {
             1 -> {
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    showAlert("Location Permission Granted","Location permission has been granted")
+                    showAlert("Location Permission Granted","Location permission has been granted, press the Near Me button again to search for events near you.")
                 } else {
                     showAlert("Location Permission Denied","Please Grant Location Permission In App Settings To Use This Feature")
                 }
