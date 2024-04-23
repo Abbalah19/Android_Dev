@@ -52,6 +52,10 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
         val eventImage = itemView.findViewById<ImageView>(R.id.imageView)
         val seeEvent = itemView.findViewById<Button>(R.id.seeEvent_button)
         val saveEvent = itemView.findViewById<Button>(R.id.saveEvent_button)
+        // I need to save the image URL, add it here then collect it in the onBindViewHolder
+        // then I should be able to grab it and add it to firestore
+        var imageUrl: String? = null
+
 
         init {
             seeEvent.setOnClickListener {
@@ -76,7 +80,7 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
                 // create an object to save the data in, idk if its needed but it seems cleaner then
                 // just saving the strings directly.
                 val savedEvent = SavedEventData().apply {
-                    //this.eventImage = eventImage
+                    this.eventImage = imageUrl // take from holder, add to firebase
                     this.eventName = eventName
                     this.loaction = eventLocation
                     this.date = eventDate
@@ -141,6 +145,8 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
                 .load(bestImageUrl)
                 .error(R.drawable.default_image) // any error including null will use the default image
                 .into(holder.eventImage)
+
+            holder.imageUrl = bestImageUrl
         }
     }
 

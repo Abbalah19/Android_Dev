@@ -17,6 +17,7 @@ data class UserProfile(
 )
 
 class SavedEventData(
+    var eventImage: String? = null,
     var eventName: String? = null,
     var loaction: String? = null,
     var date: String? = null,

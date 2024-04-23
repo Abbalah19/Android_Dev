@@ -26,4 +26,7 @@
     <string name="saved_events">Saved Events</string>
     <string name="sign_out">Sign Out</string>
     <string name="save_event">Save Event</string>
+    <string name="your_saved_events">Your Saved Events</string>
+    <string name="back_to_search">Back To Search</string>
+    <string name="delete_event">Delete Event</string>
 </resources>
