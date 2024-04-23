@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CS414Final"
         tools:targetApi="31">
+
+        <activity
+            android:name=".SavedEvents"
+            android:exported="false" />
         <activity
             android:name=".TicketSearch"
             android:exported="false" />

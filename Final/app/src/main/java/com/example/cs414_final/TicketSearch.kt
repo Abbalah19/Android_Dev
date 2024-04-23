@@ -162,6 +162,11 @@ class TicketSearch : AppCompatActivity() {
         }
     }
 
+    fun savedEvents(view: View) {
+        val intent = Intent(this, SavedEvents::class.java)
+        startActivity(intent)
+    }
+
     private fun getKeywordCity(): Pair<String, String> {
         val keyword = findViewById<EditText>(R.id.keyword_editTextText).text.toString()
         val city = findViewById<EditText>(R.id.location_editTextText).text.toString()
