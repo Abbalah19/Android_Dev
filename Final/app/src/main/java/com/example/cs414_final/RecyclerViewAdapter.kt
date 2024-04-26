@@ -3,13 +3,13 @@ package com.example.cs414_final
 save event button:
 X   Strings with a '/' break the app, need to sanitize the strings
 
-    How to get the image url? toString doesn't work
+X    How to get the image url? toString doesn't work - added to dataclass and pulled from holder
 
     Check the price range, if = $0.0 - $0.0, hide the field, have to do this in saveEventIntent?
         maybe just don't add it if the field is empty? can I check if it is already invisible?
         -there is a getVisibility method - just as easy to check string == string
 
-    If events have the same title, what happens in the db? - it will overwrite the existing event
+X    If events have the same title, what happens in the db? - it will overwrite the existing event
 
 X   IDE wants addition to db to be wrapped in a null catch, the user should never be able to click
 X       the button if they are not logged in but I guess it doesn't check that.
@@ -32,6 +32,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -56,12 +57,12 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
         // then I should be able to grab it and add it to firestore
         var imageUrl: String? = null
 
-
         init {
             seeEvent.setOnClickListener {
                 val position = adapterPosition
                 val currentItem = eventsList[position]
-                val url = currentItem._embedded.venues[0].url ?: currentItem.url
+                val url = currentItem.url
+                Log.d("Event URL", url)
                 val intent = Intent(Intent.ACTION_VIEW)
                 intent.data = Uri.parse(url)
                 itemView.context.startActivity(intent)
@@ -76,15 +77,18 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
                 val eventLocation = eventLocation.text.toString()
                 val eventDate = eventDate.text.toString()
                 val eventPriceRange = eventPriceRange.text.toString()
+                val eventUrl = eventsList[adapterPosition].url
 
                 // create an object to save the data in, idk if its needed but it seems cleaner then
                 // just saving the strings directly.
                 val savedEvent = SavedEventData().apply {
+                    this.documentId = eventName
                     this.eventImage = imageUrl // take from holder, add to firebase
                     this.eventName = eventName
-                    this.loaction = eventLocation
+                    this.location = eventLocation
                     this.date = eventDate
                     this.priceRange = eventPriceRange
+                    this.eventUrl = eventUrl
                 }
 
                 // Save the event object to Firestore under the current user's document
@@ -98,6 +102,7 @@ class RecyclerViewAdapter(private val eventsList: ArrayList<Event>) : RecyclerVi
                         .addOnSuccessListener { Log.d("Firestore", "DocumentSnapshot successfully written!") }
                         .addOnFailureListener { e -> Log.w("Firestore", "Error writing document", e) }
                 }
+                Toast.makeText(itemView.context, "Event Saved", Toast.LENGTH_SHORT).show()
             }
         }
     }

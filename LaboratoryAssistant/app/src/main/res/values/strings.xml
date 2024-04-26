@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">Laboratory Assistant</string>
+    <string name="laboratory_assistant">Laboratory Assistant</string>
+
+
+    <string name="title_activity_dilution_guide">Dilution Guide</string>
+    <string name="dilutionInfoBlock_textView">
+        This dilution guide does one thing:\n\n
+        1. It will allow you to enter a dilution factor and a final volume and calculate how much of
+        the sample and diluent you need to add to achieve the desired dilution.\n\n
+        <b>This assumes all values are in the same units.</b>
+    </string>
+    <string name="title_activity_standard_maker">StandardMakerActivity</string>
+    <string name="dilution_factor">Dilution Factor:</string>
+    <string name="final_volume">Final Volume:</string>
+    <string name="result">Result</string>
+    <string name="calculate">Calculate</string>
+    <string name="back">Back</string>
+
+    <string name="MakeStandardInfoBlock">
+        How to make a basic standard solution:\n\n
+        <b>This guide assumes all values are in the same units. By default Element lists standard
+            concentrations in uL/mL or ppm.\n\n</b>
+
+        1. Start with a clean container. Make sure to use a volumetric flask when more sensitive measurements
+        are required.\n\n
+        2. Add an initial amount of DI to the container, the exact amount is not important but make
+        sure to leave enough room for the acids and standards you will need to add.\n\n
+        3. Add the preservative, typically 2% nitric acid, and 1% hydrochloric acid by volume but this
+        can vary depending on the standard being made.\n\n
+        4. Add the standard to the container, make sure to use a pipette or other measuring device to
+        ensure the correct amount is added.\n\n
+        5. Bring the solution up to the final volume with DI water. If using a volumetric flask, make
+        sure to mix the solution by inverting the flask several times and then decant the solution
+        into a clean container.\n\n
+    </string>
+    <string name="dilution_factor_hint">X</string>
+    <string name="finalnumber">final Number</string>
+    <string name="ppm_or_ul_ml">ppm or uL/mL</string>
+    <string name="ml">mL</string>
+    <string name="standard_maker">Standard Maker</string>
+    <string name="STD_result">Result</string>
+    <string name="stock_conc">Stock Conc.</string>
+    <string name="final_conc">Final Conc.</string>
+    <string name="STD_final_volume">Final Volume:</string>
+    <string name="true_value_calculator">True Value Calculator</string>
+    <string name="TrueValueBlock">
+        This calculator does one thing:\n\n
+        <b>This assumes all values are in the same units and a liquid spike is being used. If I need
+        to procrastinate latter I might do the math for the SRM powder\n\n</b>
+        1. Enter the stock concentration of the standard, eg. the concentration of the analyte in the
+        standard or solution.\n\n
+        2. Enter the amount of the standard you are spiking into the sample.\n\n
+        3. Enter the Final Volume of the sample.\n\n
+    </string>
+    <string name="starting_conc">Starting Conc.</string>
+    <string name="spike_amt">Spike Amt.</string>
+    <string name="final_vol">Final Vol.</string>
+
+</resources>

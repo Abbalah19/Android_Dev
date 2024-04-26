@@ -30,6 +30,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/saved_recycler"
         android:layout_width="409dp"
         android:layout_height="610dp"
         android:layout_marginStart="8dp"

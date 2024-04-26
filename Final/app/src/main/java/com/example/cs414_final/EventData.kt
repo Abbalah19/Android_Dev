@@ -15,7 +15,8 @@ data class Event (
     val dates: Dates,
     val priceRanges: List<PriceRange>,
     val _embedded: EmbeddedVenues
-)
+) {
+}
 
 data class Image (
     val ratio: String,

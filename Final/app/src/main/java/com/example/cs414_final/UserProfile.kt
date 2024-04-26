@@ -1,14 +1,15 @@
 package com.example.cs414_final
-
 /*
-val savedEvent = SavedEventData().apply {
-    this.name = currentItem.name
-    this.dates = currentItem.dates
-    this.priceRanges = currentItem.priceRanges
-    this._embedded = currentItem._embedded
-    this.url = currentItem.url
-    this.images = currentItem.images
-}
+userProfiles -
+      |
+      |
+      ->userProfiles -> email, username
+             |
+             |
+             ->savedEvents -
+                   |
+                   |
+                   ->EventName -> date(String), eventImage(URL String), eventName(String), location(String), priceRange(String), eventUrl(String)
  */
 data class UserProfile(
     val email: String?,
@@ -16,10 +17,13 @@ data class UserProfile(
     val savedEvents: List<SavedEventData>? = null
 )
 
-class SavedEventData(
+data class SavedEventData(
+    var documentId: String? = null,
     var eventImage: String? = null,
     var eventName: String? = null,
-    var loaction: String? = null,
+    var location: String? = null,
     var date: String? = null,
     var priceRange: String? = null,
+    var eventUrl: String? = null,
 )
+
